@@ -9,13 +9,12 @@ export default function Arrow({ dir, hl }: Props) {
   return (
     <div className={styles.arrow_container}>
       <svg
-        xmlns="http://www.w3.org/2000/svg"
-        data-name="Layer 1"
-        viewBox="0 0 16 16"
+        viewBox="0 0 24 24"
         className={`${styles.arrow} ${styles[dir]} ${hl && styles.next}`}
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <path d="M4.5 8h7v6h-7z" />
-        <path d="M14 9 8 1 2 9z" />
+        <path d="M7 15H17V22H7V15Z" />
+        <path d="M22 16L12 2L2 16H22Z" />
       </svg>
     </div>
   );

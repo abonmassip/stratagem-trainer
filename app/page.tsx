@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import StratagemGame from "@/components/StratagemGame";
 import InputContextProvider from "@/context/input-context";
 import BatchContextProvider from "@/context/batch-context";
