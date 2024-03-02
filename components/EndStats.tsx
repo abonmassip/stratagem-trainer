@@ -12,7 +12,7 @@ export default function EndStats() {
   const [starMessage, setStarMessage] = useState<string>("");
   const [nextStarMessage, setNextStarMessage] = useState<string>("");
 
-  const thresholds = [110000, 100000, 80000, 75000, 70000];
+  const thresholds = [110000, 100000, 90000, 80000, 75000];
 
   useEffect(() => {
     document.body.style.backgroundImage = `url("/bg/8.webp")`;
