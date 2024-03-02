@@ -1,3 +1,7 @@
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function shuffleStratagems(array: any[]): any[] {
   let curId = array.length;
   // There remain elements to shuffle

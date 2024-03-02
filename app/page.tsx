@@ -4,18 +4,22 @@ import BatchContextProvider from "@/context/batch-context";
 import SoundContextProvider from "@/context/sound-context";
 import { StratagemType } from "@/lib/stratagemsData";
 import StopwatchContextProvider from "@/context/stopwatch-context";
+import { shuffleStratagems, sleep } from "@/lib/utils";
+import { stratagemsData } from "@/lib/stratagemsData";
 
 export default async function Home() {
-  const stratagemsData: StratagemType[] = await fetch(
-    "http://localhost:3000/api/data",
-    { cache: "no-cache" }
-  ).then((res) => res.json());
+  async function getData() {
+    await sleep(2000);
+    return shuffleStratagems(stratagemsData);
+  }
+
+  const data: StratagemType[] = await getData();
 
   return (
     <InputContextProvider>
       <StopwatchContextProvider>
         <SoundContextProvider>
-          <BatchContextProvider stratagems={stratagemsData}>
+          <BatchContextProvider stratagems={data}>
             <StratagemGame />
           </BatchContextProvider>
         </SoundContextProvider>
