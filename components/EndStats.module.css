@@ -1,0 +1,71 @@
+.main {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.title {
+  color: #faed0c;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.big {
+  font-size: 2rem;
+}
+
+.mission_time {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.mission_time_title {
+  font-size: 0.8rem;
+  padding: 4px;
+  color: #bcb8b2;
+  background: repeating-linear-gradient(
+    45deg,
+    #00000000,
+    #00000000 3px,
+    #00000033 3px,
+    #00000033 6px
+  );
+}
+
+.stars {
+  display: flex;
+  margin: auto;
+  gap: 8px;
+}
+
+.stars * {
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.message_border {
+  padding: 10px;
+  background-color: rgba(250, 237, 12, 0.1);
+}
+
+.message {
+  color: black;
+  background-color: #faed0c;
+  padding: 6px;
+}
+
+.hint {
+  text-shadow: 2px 2px 1px rgba(0, 0, 0, 0.3);
+}
+
+.try_again {
+  width: 50%;
+  margin: auto;
+  margin-top: 50px;
+  padding: 8px 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  border-radius: 10px;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+}

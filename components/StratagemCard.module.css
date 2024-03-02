@@ -1,0 +1,25 @@
+.Card {
+  width: 310px;
+  height: 50px;
+  display: flex;
+}
+
+.Card img {
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+.disabled {
+  opacity: 0.1;
+}
+
+.solved {
+  opacity: 0.6;
+}
+
+.stratagemInfo {
+  margin-left: 30px;
+}
+
+.stratagemCode {
+  display: flex;
+}
