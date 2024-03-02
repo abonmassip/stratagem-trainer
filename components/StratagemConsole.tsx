@@ -36,6 +36,13 @@ export default function StratagemConsole() {
           return <StratagemCard key={stratagem.name} stratagem={stratagem} />;
         })}
       </div>
+      <div className={styles.version}>
+        <p>STRATAGEM TRAINER 1.000.004</p>
+        <p>
+          &copy; 2024 ABONMASSIP |{" "}
+          <a href="https://github.com/abonmassip/stratagem-trainer">GITHUB</a>
+        </p>
+      </div>
     </div>
   );
 }
