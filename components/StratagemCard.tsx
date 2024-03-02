@@ -31,7 +31,12 @@ export default function StratagemCard({ stratagem }: Props) {
         solved && styles.solved
       }`}
     >
-      <Image src={`/icons/${name}.png`} alt={name} width={48} height={48} />
+      <Image
+        src={`/icons/${name.replace(/\s/g, "")}.png`}
+        alt={name}
+        width={48}
+        height={48}
+      />
       <div className={styles.stratagemInfo}>
         <p>{solved ? "Stratagem Deployed" : name.toUpperCase()}</p>
         <div className={styles.stratagemCode}>
