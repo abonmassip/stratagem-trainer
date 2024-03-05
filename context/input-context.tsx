@@ -1,3 +1,7 @@
+/**
+ * Context that manages state of the sequence entered by the player
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState } from "react";

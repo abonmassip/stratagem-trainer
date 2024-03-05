@@ -37,7 +37,7 @@ export default function StratagemConsole() {
         })}
       </div>
       <div className={styles.version}>
-        <p>STRATAGEM TRAINER 1.000.004</p>
+        <p>STRATAGEM TRAINER 1.0.5</p>
         <p>
           &copy; 2024 ABONMASSIP |{" "}
           <a href="https://github.com/abonmassip/stratagem-trainer">GITHUB</a>

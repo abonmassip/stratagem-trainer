@@ -1,3 +1,7 @@
+/**
+ * Custom hook that starts counting and keeps track of the elapsed time.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useRef, useState } from "react";

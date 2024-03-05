@@ -1,3 +1,13 @@
+/**
+ * Context that manages state related to the stratagems.
+ * The batch is the current loaded stratagems in the game.
+ * The remaining stratagems are stored too to be loaded later with
+ * the function getBatch.
+ * The batch count is used to paginate the stratagems.
+ * The disabled and solved names lists are used to properly style
+ * the stratagem cards.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
@@ -11,14 +21,14 @@ type BatchContextProviderProps = {
 type BatchContext = {
   batch: StratagemType[];
   setBatch: React.Dispatch<React.SetStateAction<StratagemType[]>>;
-  remaining: StratagemType[];
-  setRemaining: React.Dispatch<React.SetStateAction<StratagemType[]>>;
+  remainingStratagems: StratagemType[];
+  setRemainingStratagems: React.Dispatch<React.SetStateAction<StratagemType[]>>;
   getBatch: () => void;
   batchCount: { current: number; total: number };
-  off: string[];
-  setOff: React.Dispatch<React.SetStateAction<string[]>>;
-  done: string[];
-  setDone: React.Dispatch<React.SetStateAction<string[]>>;
+  disabledNames: string[];
+  setDisabledNames: React.Dispatch<React.SetStateAction<string[]>>;
+  solvedNames: string[];
+  setSolvedNames: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const BatchContext = createContext<BatchContext | null>(null);
@@ -28,20 +38,23 @@ export default function BatchContextProvider({
   stratagems,
 }: BatchContextProviderProps) {
   const [batch, setBatch] = useState<StratagemType[]>([]);
-  const [remaining, setRemaining] = useState<StratagemType[]>(stratagems);
+  const [remainingStratagems, setRemainingStratagems] =
+    useState<StratagemType[]>(stratagems);
   const [batchCount, setBatchCount] = useState({
     current: 0,
-    total: Math.ceil(remaining.length / 8),
+    total: Math.ceil(remainingStratagems.length / 8),
   });
-  const [off, setOff] = useState<string[]>([]);
-  const [done, setDone] = useState<string[]>([]);
+  const [disabledNames, setDisabledNames] = useState<string[]>([]);
+  const [solvedNames, setSolvedNames] = useState<string[]>([]);
 
+  // Get new batch of stratagems to solve, keep the rest for later
   function getBatch() {
-    const left = [...remaining];
-    const batch = left.splice(0, 8);
+    const BatchAmount = 8;
+    const left = [...remainingStratagems];
+    const batch = left.splice(0, BatchAmount);
 
     setBatch(batch);
-    setRemaining(left);
+    setRemainingStratagems(left);
 
     const newCount = { ...batchCount, current: batchCount.current + 1 };
     setBatchCount(newCount);
@@ -53,14 +66,14 @@ export default function BatchContextProvider({
       value={{
         batch,
         setBatch,
-        remaining,
-        setRemaining,
+        remainingStratagems,
+        setRemainingStratagems,
         getBatch,
         batchCount,
-        off,
-        setOff,
-        done,
-        setDone,
+        disabledNames,
+        setDisabledNames,
+        solvedNames,
+        setSolvedNames,
       }}
     >
       {children}

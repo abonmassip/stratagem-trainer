@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function StratagemCard({ stratagem }: Props) {
-  const { off, done } = useBatchContext();
+  const { disabledNames, solvedNames } = useBatchContext();
   const [disabled, setDisabled] = useState<boolean>(false);
   const [solved, setSolved] = useState<boolean>(false);
   const { input } = useInputContext();
@@ -21,9 +21,9 @@ export default function StratagemCard({ stratagem }: Props) {
   const { name, code } = stratagem;
 
   useEffect(() => {
-    off.includes(name) ? setDisabled(true) : setDisabled(false);
-    done.includes(name) ? setSolved(true) : setSolved(false);
-  }, [off, done]);
+    disabledNames.includes(name) ? setDisabled(true) : setDisabled(false);
+    solvedNames.includes(name) ? setSolved(true) : setSolved(false);
+  }, [disabledNames, solvedNames]);
 
   return (
     <div

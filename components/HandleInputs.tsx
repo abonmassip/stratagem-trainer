@@ -1,3 +1,9 @@
+/**
+ * Component that adds event listeners for the keyboard keydown
+ * and touch events, and stores the direction entered by the user
+ * to the input state. It doesn't display anything
+ */
+
 "use client";
 
 import { useInputContext } from "@/context/input-context";
@@ -7,19 +13,19 @@ export default function HandleInputs() {
   const { setInput } = useInputContext();
 
   // Make WASD work as arrow keys
-  function checkKey(key: string) {
+  function getDirectionFromKeyEvent(key: string) {
     switch (key) {
       case "ArrowUp":
-      case "w":
+      case "KeyW":
         return "u";
       case "ArrowRight":
-      case "d":
+      case "KeyD":
         return "r";
       case "ArrowDown":
-      case "s":
+      case "KeyS":
         return "d";
       case "ArrowLeft":
-      case "a":
+      case "KeyA":
         return "l";
       default:
         return "";
@@ -30,10 +36,10 @@ export default function HandleInputs() {
     // KEYBOARD INPUTS: only use arrow keys and WASD
 
     const handleKeyDown = (event: any) => {
-      const key = checkKey(event.key);
-      if (!key) return;
+      const keyCode = getDirectionFromKeyEvent(event.code);
+      if (!keyCode) return;
 
-      setInput((prev) => [...prev, key]);
+      setInput((prev) => [...prev, keyCode]);
     };
 
     // TOUCH INPUTS: register as "ArrowUp", "ArrowRight", ...

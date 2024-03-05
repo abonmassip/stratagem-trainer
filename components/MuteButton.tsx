@@ -3,7 +3,7 @@ import { useSoundContext } from "@/context/sound-context";
 import styles from "./MuteButton.module.css";
 
 export default function MuteButton() {
-  const { sound, toggleSound } = useSoundContext();
+  const { soundActive, toggleSound } = useSoundContext();
 
   const unmute = (
     <svg
@@ -45,7 +45,7 @@ export default function MuteButton() {
 
   return (
     <button className={styles.mute} onClick={() => toggleSound()}>
-      {sound ? mute : unmute}
+      {soundActive ? mute : unmute}
     </button>
   );
 }

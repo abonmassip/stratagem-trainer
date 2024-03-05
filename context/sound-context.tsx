@@ -1,3 +1,8 @@
+/**
+ * Custom hook that allows playing any sound and toggling the
+ * sound or mute in the app.
+ */
+
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
@@ -10,7 +15,7 @@ type SoundContextProviderProps = {
 };
 
 type SoundContext = {
-  sound: boolean;
+  soundActive: boolean;
   toggleSound: () => void;
   playSound: (track: string) => void;
 };
@@ -20,12 +25,12 @@ export const SoundContext = createContext<SoundContext | null>(null);
 export default function SoundContextProvider({
   children,
 }: SoundContextProviderProps) {
-  const [sound, setSound] = useState<boolean>(false);
+  const [soundActive, setSoundActive] = useState<boolean>(false);
   const { input } = useInputContext();
 
   function toggleSound() {
-    Howler.mute(sound);
-    setSound(!sound);
+    Howler.mute(soundActive);
+    setSoundActive(!soundActive);
   }
 
   let SoundRight: Howl;
@@ -77,7 +82,7 @@ export default function SoundContextProvider({
   };
 
   function playSound(track: string) {
-    if (!sound) return;
+    if (!soundActive) return;
     switch (track) {
       case "right":
         playRight(1 + input.length * 0.1);
@@ -100,7 +105,7 @@ export default function SoundContextProvider({
   }
 
   return (
-    <SoundContext.Provider value={{ sound, toggleSound, playSound }}>
+    <SoundContext.Provider value={{ soundActive, toggleSound, playSound }}>
       {children}
     </SoundContext.Provider>
   );

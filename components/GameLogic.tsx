@@ -1,103 +1,104 @@
+/**
+ * Component containing the game logic. It doesn't display
+ * anything. It runs every time the user inputs a direction,
+ * and decides what to do next.
+ */
+
 "use-client";
 
-import { useBatchContext } from "@/context/batch-context";
-import { useInputContext } from "@/context/input-context";
-import { StratagemType } from "@/lib/stratagemsData";
 import { useEffect, useState } from "react";
-import { useSoundContext } from "@/context/sound-context";
+
+import { useInputContext } from "@/context/input-context";
 import { useStopwatchContext } from "@/context/stopwatch-context";
+import { useSoundContext } from "@/context/sound-context";
+import { useBatchContext } from "@/context/batch-context";
+
+import { StratagemType } from "@/lib/stratagemsData";
 
 export default function GameLogic() {
   const { input, setInput } = useInputContext();
-  const { remaining, batch, batchCount, getBatch, off, setOff, done, setDone } =
-    useBatchContext();
-  const { playSound } = useSoundContext();
   const { stopTime } = useStopwatchContext();
+  const { playSound } = useSoundContext();
 
-  const [left, setLeft] = useState<StratagemType[]>([]);
-  const [disabled, setDisabled] = useState<StratagemType[]>([]);
-  const [solved, setSolved] = useState<StratagemType[]>([]);
+  // Keep track of disabled and solved stratagems in BatchContext
+  const {
+    remainingStratagems,
+    batch,
+    getBatch,
+    setDisabledNames,
+    setSolvedNames,
+  } = useBatchContext();
+
+  const [loadedStratagems, setLoadedStratagems] = useState<StratagemType[]>([]);
+  const [disabledStratagems, setDisabledStratagems] = useState<StratagemType[]>(
+    []
+  );
+  const [solvedStratagems, setSolvedStratagems] = useState<StratagemType[]>([]);
 
   useEffect(() => {
-    setLeft([...batch]);
+    setLoadedStratagems([...batch]);
   }, [batch]);
 
   useEffect(() => {
     if (input.length === 0) return;
 
-    const step = input.length - 1;
+    const lastInputIndex = input.length - 1;
 
-    const newLeft: StratagemType[] = [];
-    const newDisabled: StratagemType[] = [...disabled];
-    const newSolved: StratagemType[] = [...solved];
+    const newLoaded: StratagemType[] = [];
+    const newDisabled: StratagemType[] = [...disabledStratagems];
+    const newSolved: StratagemType[] = [...solvedStratagems];
 
-    left.forEach((stratagem: StratagemType, i) => {
-      // if input matches sequence and sequence is complete move to solved
-      if (stratagem.code[step] === input[step]) {
+    // Loop loaded stratagems on each input to check sequences
+    loadedStratagems.forEach((stratagem: StratagemType, i) => {
+      if (stratagem.code[lastInputIndex] === input[lastInputIndex]) {
         if (stratagem.code.length === input.length) {
+          // If last input value matches sequence and sequence is complete move to solved
           newSolved.push(stratagem);
-          setDone((prev) => [...prev, stratagem.name]);
+          setSolvedNames((prev) => [...prev, stratagem.name]);
           playSound("sequence");
         } else {
-          // if sequence is not complete keep stratagem in left
-          newLeft.push(stratagem);
+          // If sequence is not complete keep stratagem in loaded
+          newLoaded.push(stratagem);
         }
-      } else if (stratagem.code[step] !== input[step]) {
-        // if input doesn't match move to disabled
+      } else if (stratagem.code[lastInputIndex] !== input[lastInputIndex]) {
+        // If last input value doesn't match the sequence move to disabled
         newDisabled.push(stratagem);
-        setOff((prev) => [...prev, stratagem.name]);
+        setDisabledNames((prev) => [...prev, stratagem.name]);
       }
     });
 
+    // After looping, check what to do next
     if (newSolved.length === batch.length) {
-      // all batch is solved, reset all and next batch
-      setLeft([]);
-      setDisabled([]);
-      setOff([]);
-      setSolved([]);
-      setSolved([]);
+      // If all batch is solved, reset state and get next batch or finish game
+      setLoadedStratagems([]);
+      setDisabledStratagems([]);
+      setDisabledNames([]);
+      setSolvedStratagems([]);
+      setSolvedStratagems([]);
       setInput([]);
-      if (remaining.length > 0) {
+      if (remainingStratagems.length > 0) {
         playSound("mission");
         getBatch();
       } else {
         playSound("extraction");
         stopTime();
       }
-    } else if (
-      newDisabled.length === batch.length ||
-      newSolved.length + newDisabled.length === batch.length
-    ) {
-      // all remaining to be solved are disabled, reset input and disabled
+    } else if (newSolved.length + newDisabled.length === batch.length) {
+      // If there are still stratagems to solve and none is active, reset input and reset disabled stratagems
       setInput([]);
-      setLeft(newDisabled);
-      setDisabled([]);
-      setOff([]);
-      setSolved(newSolved);
-      if (newSolved.length === solved.length) playSound("wrong");
+      setLoadedStratagems(newDisabled);
+      setDisabledStratagems([]);
+      setDisabledNames([]);
+      setSolvedStratagems(newSolved);
+      if (newSolved.length === solvedStratagems.length) playSound("wrong");
     } else {
-      // still remaining stratagems
-      setLeft(newLeft);
-      setDisabled(newDisabled);
-      setSolved(newSolved);
+      // If there are still stratagems active don't reset
+      setLoadedStratagems(newLoaded);
+      setDisabledStratagems(newDisabled);
+      setSolvedStratagems(newSolved);
       playSound("right");
     }
   }, [input]);
 
-  function DebugInfo() {
-    return (
-      <div className="debug">
-        <p>--input--: {input.join(",").toUpperCase()}</p>
-        <p>--left--: {left.map((el) => el.name).join(", ")}</p>
-        <p>--disabled--: {disabled.map((el) => el.name).join(", ")}</p>
-        <p>--solved--: {solved.map((el) => el.name).join(", ")}</p>
-        <p>--batch--: {batch.map((el) => el.name).join(",")}</p>
-        <p>--off--: {off.join(",")}</p>
-        <p>--done--: {done.join(",")}</p>
-      </div>
-    );
-  }
-
-  // return <DebugInfo />;
   return null;
 }
